@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: resmon
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true        
+
+management:
+  endpoint:
+    restart:
+      enabled: true 
+      
+server:
+  port: 8080

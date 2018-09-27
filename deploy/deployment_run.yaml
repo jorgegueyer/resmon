@@ -1,0 +1,46 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: resmon  
+spec:
+  selector:
+    run: resmon
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+      nodePort: 30080
+      name: http
+  type: NodePort
+
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: resmon
+  labels:
+    run: resmon
+spec:
+  replicas: 1  
+  template:
+    metadata:
+      labels:
+        run: resmon
+    spec:
+      containers:
+        - name: resmon
+          image: resmon:v1          
+          ports:
+          - containerPort: 8080
+            protocol: TCP  
+          volumeMounts:
+          - name: config-app
+            mountPath: /config
+      volumes:
+        - name: config-app     
+          configMap:
+            name: resmon-config 
+            items:
+            - key: application.yml
+              path: application.yml
+          

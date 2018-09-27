@@ -1,0 +1,29 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: resmon
+  labels:
+    app: resmon
+spec:
+  replicas: 1  
+  template:
+    metadata:
+      labels:
+        run: resmon
+    spec:
+      containers:
+        - name: resmon
+          image: resmon:v1
+          ports:
+          - containerPort: 8080
+            protocol: TCP  
+          volumeMounts:
+          - name: config-app
+            mountPath: /config
+      volumes:
+        - name: config-app     
+          configMap:
+            name: app-config 
+            items:
+            - key: application.yml
+              path: application.yml
